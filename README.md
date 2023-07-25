@@ -61,3 +61,220 @@ Raised when a buffer related operation cannot be performed.
 
 exception LookupError
 The base class for the exceptions that are raised when a key or index used on a mapping or sequence is invalid: IndexError, KeyError. This can be raised directly by codecs.lookup().
+# Concrete exceptions
+The following exceptions are the exceptions that are usually raised.
+
+exception AssertionError
+Raised when an assert statement fails.
+
+exception AttributeError
+Raised when an attribute reference (see Attribute references) or assignment fails. (When an object does not support attribute references or attribute assignments at all, TypeError is raised.)
+
+The name and obj attributes can be set using keyword-only arguments to the constructor. When set they represent the name of the attribute that was attempted to be accessed and the object that was accessed for said attribute, respectively.
+
+Changed in version 3.10: Added the name and obj attributes.
+
+exception EOFError
+Raised when the input() function hits an end-of-file condition (EOF) without reading any data. (N.B.: the io.IOBase.read() and io.IOBase.readline() methods return an empty string when they hit EOF.)
+
+exception FloatingPointError
+Not currently used.
+
+exception GeneratorExit
+Raised when a generator or coroutine is closed; see generator.close() and coroutine.close(). It directly inherits from BaseException instead of Exception since it is technically not an error.
+
+exception ImportError
+Raised when the import statement has troubles trying to load a module. Also raised when the “from list” in from ... import has a name that cannot be found.
+
+The name and path attributes can be set using keyword-only arguments to the constructor. When set they represent the name of the module that was attempted to be imported and the path to any file which triggered the exception, respectively.
+
+Changed in version 3.3: Added the name and path attributes.
+
+exception ModuleNotFoundError
+A subclass of ImportError which is raised by import when a module could not be located. It is also raised when None is found in sys.modules.
+
+New in version 3.6.
+
+exception IndexError
+Raised when a sequence subscript is out of range. (Slice indices are silently truncated to fall in the allowed range; if an index is not an integer, TypeError is raised.)
+
+exception KeyError
+Raised when a mapping (dictionary) key is not found in the set of existing keys.
+
+exception KeyboardInterrupt
+Raised when the user hits the interrupt key (normally Control-C or Delete). During execution, a check for interrupts is made regularly. The exception inherits from BaseException so as to not be accidentally caught by code that catches Exception and thus prevent the interpreter from exiting.
+
+Note Catching a KeyboardInterrupt requires special consideration. Because it can be raised at unpredictable points, it may, in some circumstances, leave the running program in an inconsistent state. It is generally best to allow KeyboardInterrupt to end the program as quickly as possible or avoid raising it entirely. (See Note on Signal Handlers and Exceptions.)
+exception MemoryError
+Raised when an operation runs out of memory but the situation may still be rescued (by deleting some objects). The associated value is a string indicating what kind of (internal) operation ran out of memory. Note that because of the underlying memory management architecture (C’s malloc() function), the interpreter may not always be able to completely recover from this situation; it nevertheless raises an exception so that a stack traceback can be printed, in case a run-away program was the cause.
+
+exception NameError
+Raised when a local or global name is not found. This applies only to unqualified names. The associated value is an error message that includes the name that could not be found.
+
+The name attribute can be set using a keyword-only argument to the constructor. When set it represent the name of the variable that was attempted to be accessed.
+
+Changed in version 3.10: Added the name attribute.
+
+exception NotImplementedError
+This exception is derived from RuntimeError. In user defined base classes, abstract methods should raise this exception when they require derived classes to override the method, or while the class is being developed to indicate that the real implementation still needs to be added.
+
+Note It should not be used to indicate that an operator or method is not meant to be supported at all – in that case either leave the operator / method undefined or, if a subclass, set it to None.
+Note NotImplementedError and NotImplemented are not interchangeable, even though they have similar names and purposes. See NotImplemented for details on when to use it.
+exception OSError([arg])
+exception OSError(errno, strerror[, filename[, winerror[, filename2]]])
+This exception is raised when a system function returns a system-related error, including I/O failures such as “file not found” or “disk full” (not for illegal argument types or other incidental errors).
+
+The second form of the constructor sets the corresponding attributes, described below. The attributes default to None if not specified. For backwards compatibility, if three arguments are passed, the args attribute contains only a 2-tuple of the first two constructor arguments.
+
+The constructor often actually returns a subclass of OSError, as described in OS exceptions below. The particular subclass depends on the final errno value. This behaviour only occurs when constructing OSError directly or via an alias, and is not inherited when subclassing.
+
+errno
+A numeric error code from the C variable errno.
+
+winerror
+Under Windows, this gives you the native Windows error code. The errno attribute is then an approximate translation, in POSIX terms, of that native error code.
+
+Under Windows, if the winerror constructor argument is an integer, the errno attribute is determined from the Windows error code, and the errno argument is ignored. On other platforms, the winerror argument is ignored, and the winerror attribute does not exist.
+
+strerror
+The corresponding error message, as provided by the operating system. It is formatted by the C functions perror() under POSIX, and FormatMessage() under Windows.
+
+filename
+filename2
+For exceptions that involve a file system path (such as open() or os.unlink()), filename is the file name passed to the function. For functions that involve two file system paths (such as os.rename()), filename2 corresponds to the second file name passed to the function.
+
+Changed in version 3.3: EnvironmentError, IOError, WindowsError, socket.error, select.error and mmap.error have been merged into OSError, and the constructor may return a subclass.
+
+Changed in version 3.4: The filename attribute is now the original file name passed to the function, instead of the name encoded to or decoded from the filesystem encoding and error handler. Also, the filename2 constructor argument and attribute was added.
+
+exception OverflowError
+Raised when the result of an arithmetic operation is too large to be represented. This cannot occur for integers (which would rather raise MemoryError than give up). However, for historical reasons, OverflowError is sometimes raised for integers that are outside a required range. Because of the lack of standardization of floating point exception handling in C, most floating point operations are not checked.
+
+exception RecursionError
+This exception is derived from RuntimeError. It is raised when the interpreter detects that the maximum recursion depth (see sys.getrecursionlimit()) is exceeded.
+
+New in version 3.5: Previously, a plain RuntimeError was raised.
+
+exception ReferenceError
+This exception is raised when a weak reference proxy, created by the weakref.proxy() function, is used to access an attribute of the referent after it has been garbage collected. For more information on weak references, see the weakref module.
+
+exception RuntimeError
+Raised when an error is detected that doesn’t fall in any of the other categories. The associated value is a string indicating what precisely went wrong.
+
+exception StopIteration
+Raised by built-in function next() and an iterator's __next__() method to signal that there are no further items produced by the iterator.
+
+The exception object has a single attribute value, which is given as an argument when constructing the exception, and defaults to None.
+
+When a generator or coroutine function returns, a new StopIteration instance is raised, and the value returned by the function is used as the value parameter to the constructor of the exception.
+
+If a generator code directly or indirectly raises StopIteration, it is converted into a RuntimeError (retaining the StopIteration as the new exception’s cause).
+
+Changed in version 3.3: Added value attribute and the ability for generator functions to use it to return a value.
+
+Changed in version 3.5: Introduced the RuntimeError transformation via from __future__ import generator_stop, see PEP 479.
+
+Changed in version 3.7: Enable PEP 479 for all code by default: a StopIteration error raised in a generator is transformed into a RuntimeError.
+
+exception StopAsyncIteration
+Must be raised by __anext__() method of an asynchronous iterator object to stop the iteration.
+
+New in version 3.5.
+
+exception SyntaxError(message, details)
+Raised when the parser encounters a syntax error. This may occur in an import statement, in a call to the built-in functions compile(), exec(), or eval(), or when reading the initial script or standard input (also interactively).
+
+The str() of the exception instance returns only the error message. Details is a tuple whose members are also available as separate attributes.
+
+filename
+The name of the file the syntax error occurred in.
+
+lineno
+Which line number in the file the error occurred in. This is 1-indexed: the first line in the file has a lineno of 1.
+
+offset
+The column in the line where the error occurred. This is 1-indexed: the first character in the line has an offset of 1.
+
+text
+The source code text involved in the error.
+
+end_lineno
+Which line number in the file the error occurred ends in. This is 1-indexed: the first line in the file has a lineno of 1.
+
+end_offset
+The column in the end line where the error occurred finishes. This is 1-indexed: the first character in the line has an offset of 1.
+
+For errors in f-string fields, the message is prefixed by “f-string: ” and the offsets are offsets in a text constructed from the replacement expression. For example, compiling f’Bad {a b} field’ results in this args attribute: (‘f-string: …’, (‘’, 1, 2, ‘(a b)n’, 1, 5)).
+
+Changed in version 3.10: Added the end_lineno and end_offset attributes.
+
+exception IndentationError
+Base class for syntax errors related to incorrect indentation. This is a subclass of SyntaxError.
+
+exception TabError
+Raised when indentation contains an inconsistent use of tabs and spaces. This is a subclass of IndentationError.
+
+exception SystemError
+Raised when the interpreter finds an internal error, but the situation does not look so serious to cause it to abandon all hope. The associated value is a string indicating what went wrong (in low-level terms).
+
+You should report this to the author or maintainer of your Python interpreter. Be sure to report the version of the Python interpreter (sys.version; it is also printed at the start of an interactive Python session), the exact error message (the exception’s associated value) and if possible the source of the program that triggered the error.
+
+exception SystemExit
+This exception is raised by the sys.exit() function. It inherits from BaseException instead of Exception so that it is not accidentally caught by code that catches Exception. This allows the exception to properly propagate up and cause the interpreter to exit. When it is not handled, the Python interpreter exits; no stack traceback is printed. The constructor accepts the same optional argument passed to sys.exit(). If the value is an integer, it specifies the system exit status (passed to C’s exit() function); if it is None, the exit status is zero; if it has another type (such as a string), the object’s value is printed and the exit status is one.
+
+A call to sys.exit() is translated into an exception so that clean-up handlers (finally clauses of try statements) can be executed, and so that a debugger can execute a script without running the risk of losing control. The os._exit() function can be used if it is absolutely positively necessary to exit immediately (for example, in the child process after a call to os.fork()).
+
+code
+The exit status or error message that is passed to the constructor. (Defaults to None.)
+
+exception TypeError
+Raised when an operation or function is applied to an object of inappropriate type. The associated value is a string giving details about the type mismatch.
+
+This exception may be raised by user code to indicate that an attempted operation on an object is not supported, and is not meant to be. If an object is meant to support a given operation but has not yet provided an implementation, NotImplementedError is the proper exception to raise.
+
+Passing arguments of the wrong type (e.g. passing a list when an int is expected) should result in a TypeError, but passing arguments with the wrong value (e.g. a number outside expected boundaries) should result in a ValueError.
+
+exception UnboundLocalError
+Raised when a reference is made to a local variable in a function or method, but no value has been bound to that variable. This is a subclass of NameError.
+
+exception UnicodeError
+Raised when a Unicode-related encoding or decoding error occurs. It is a subclass of ValueError.
+
+UnicodeError has attributes that describe the encoding or decoding error. For example, err.object[err.start:err.end] gives the particular invalid input that the codec failed on.
+
+encoding
+The name of the encoding that raised the error.
+
+reason
+A string describing the specific codec error.
+
+object
+The object the codec was attempting to encode or decode.
+
+start
+The first index of invalid data in object.
+
+end
+The index after the last invalid data in object.
+
+exception UnicodeEncodeError
+Raised when a Unicode-related error occurs during encoding. It is a subclass of UnicodeError.
+
+exception UnicodeDecodeError
+Raised when a Unicode-related error occurs during decoding. It is a subclass of UnicodeError.
+
+exception UnicodeTranslateError
+Raised when a Unicode-related error occurs during translating. It is a subclass of UnicodeError.
+
+exception ValueError
+Raised when an operation or function receives an argument that has the right type but an inappropriate value, and the situation is not described by a more precise exception such as IndexError.
+
+exception ZeroDivisionError
+Raised when the second argument of a division or modulo operation is zero. The associated value is a string indicating the type of the operands and the operation.
+
+The following exceptions are kept for compatibility with previous versions; starting from Python 3.3, they are aliases of OSError.
+
+exception EnvironmentError
+exception IOError
+exception WindowsError
+Only available on Windows.
