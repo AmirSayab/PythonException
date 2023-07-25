@@ -23,3 +23,41 @@ In either case, the exception itself is always shown after any chained exception
 User code can create subclasses that inherit from an exception type. It’s recommended to only subclass one exception type at a time to avoid any possible conflicts between how the bases handle the args attribute, as well as due to possible memory layout incompatibilities.
 
 CPython implementation detail: Most built-in exceptions are implemented in C for efficiency, see: Objects/exceptions.c. Some have custom memory layouts which makes it impossible to create a subclass that inherits from multiple exception types. The memory layout of a type is an implementation detail and might change between Python versions, leading to new conflicts in the future. Therefore, it’s recommended to avoid subclassing multiple exception types altogether.
+# Base classes
+The following exceptions are used mostly as base classes for other exceptions.
+
+exception BaseException
+The base class for all built-in exceptions. It is not meant to be directly inherited by user-defined classes (for that, use Exception). If str() is called on an instance of this class, the representation of the argument(s) to the instance are returned, or the empty string when there were no arguments.
+
+args
+The tuple of arguments given to the exception constructor. Some built-in exceptions (like OSError) expect a certain number of arguments and assign a special meaning to the elements of this tuple, while others are usually called only with a single string giving an error message.
+
+with_traceback(tb)
+This method sets tb as the new traceback for the exception and returns the exception object. It was more commonly used before the exception chaining features of PEP 3134 became available. The following example shows how we can convert an instance of SomeException into an instance of OtherException while preserving the traceback. Once raised, the current frame is pushed onto the traceback of the OtherException, as would have happened to the traceback of the original SomeException had we allowed it to propagate to the caller.
+
+try:
+    ...
+except SomeException:
+    tb = sys.exception().__traceback__
+    raise OtherException(...).with_traceback(tb)
+add_note(note)
+Add the string note to the exception’s notes which appear in the standard traceback after the exception string. A TypeError is raised if note is not a string.
+
+New in version 3.11.
+
+__notes__
+A list of the notes of this exception, which were added with add_note(). This attribute is created when add_note() is called.
+
+New in version 3.11.
+
+exception Exception
+All built-in, non-system-exiting exceptions are derived from this class. All user-defined exceptions should also be derived from this class.
+
+exception ArithmeticError
+The base class for those built-in exceptions that are raised for various arithmetic errors: OverflowError, ZeroDivisionError, FloatingPointError.
+
+exception BufferError
+Raised when a buffer related operation cannot be performed.
+
+exception LookupError
+The base class for the exceptions that are raised when a key or index used on a mapping or sequence is invalid: IndexError, KeyError. This can be raised directly by codecs.lookup().
