@@ -430,3 +430,16 @@ Returns an exception group with the same message, but which wraps the exceptions
 This method is used by subgroup() and split(). A subclass needs to override it in order to make subgroup() and split() return instances of the subclass rather than ExceptionGroup.
 
 subgroup() and split() copy the __traceback__, __cause__, __context__ and __notes__ fields from the original exception group to the one returned by derive(), so these fields do not need to be updated by derive().
+![image](https://github.com/AmirSayab/PythonException/assets/111190828/17c7004c-e4b6-403b-9842-cbe772cd24ec)
+Note that BaseExceptionGroup defines __new__(), so subclasses that need a different constructor signature need to override that rather than __init__(). For example, the following defines an exception group subclass which accepts an exit_code and and constructs the group’s message from it.
+![image](https://github.com/AmirSayab/PythonException/assets/111190828/fc5f4981-56f5-4637-a231-7e3b7a817918)
+Like ExceptionGroup, any subclass of BaseExceptionGroup which is also a subclass of Exception can only wrap instances of Exception.
+
+New in version 3.11.
+
+# Exception hierarchy
+The class hierarchy for built-in exceptions is:
+![image](https://github.com/AmirSayab/PythonException/assets/111190828/f61f70a1-240f-472b-8d50-d470ce54bcb1)
+
+
+
